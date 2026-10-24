@@ -1,0 +1,53 @@
+
+#include <stdio.h>
+
+int main() {
+    int n, at[20], bt[20], rem[20], pr[20];
+    int wt[20], tat[20], time = 0, completed = 0;
+    float avgwt = 0, avgtat = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Arrival, burst, priority of P%d: ", i + 1);
+        scanf("%d%d%d", &at[i], &bt[i], &pr[i]);
+        rem[i] = bt[i];
+    }
+
+    while (completed < n) {
+        int idx = -1;
+
+        for (int i = 0; i < n; i++) {
+            if (at[i] <= time && rem[i] > 0 &&
+                (idx == -1 || pr[i] < pr[idx]))
+                idx = i;
+        }
+
+        if (idx == -1) {
+            time++;
+            continue;
+        }
+
+        rem[idx]--;
+        time++;
+
+        if (rem[idx] == 0) {
+            completed++;
+            tat[idx] = time - at[idx];
+            wt[idx] = tat[idx] - bt[idx];
+        }
+    }
+
+    printf("\nProcess\tWT\tTAT\n");
+
+    for (int i = 0; i < n; i++) {
+        avgwt += wt[i];
+        avgtat += tat[i];
+        printf("P%d\t%d\t%d\n", i + 1, wt[i], tat[i]);
+    }
+
+    printf("Average WT = %.2f\n", avgwt / n);
+    printf("Average TAT = %.2f\n", avgtat / n);
+    return 0;
+}
