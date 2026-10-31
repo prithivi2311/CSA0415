@@ -1,0 +1,61 @@
+
+#include <stdio.h>
+
+int main() {
+    int n, bt[20], rem[20], wt[20], tat[20];
+    int quantum, time = 0, done;
+
+    float avgwt = 0, avgtat = 0;
+
+    printf("Enter number of processes: ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Burst time of P%d: ", i + 1);
+        scanf("%d", &bt[i]);
+        rem[i] = bt[i];
+    }
+
+    printf("Enter time quantum: ");
+    scanf("%d", &quantum);
+
+    if (quantum <= 0) {
+        printf("Invalid time quantum.\n");
+        return 1;
+    }
+
+    do {
+        done = 1;
+
+        for (int i = 0; i < n; i++) {
+            if (rem[i] > 0) {
+                done = 0;
+
+                if (rem[i] > quantum) {
+                    time += quantum;
+                    rem[i] -= quantum;
+                } else {
+                    time += rem[i];
+                    rem[i] = 0;
+                    tat[i] = time;
+                    wt[i] = tat[i] - bt[i];
+                }
+            }
+        }
+    } while (!done);
+
+    printf("\nProcess\tBT\tWT\tTAT\n");
+
+    for (int i = 0; i < n; i++) {
+        avgwt += wt[i];
+        avgtat += tat[i];
+
+        printf("P%d\t%d\t%d\t%d\n",
+               i + 1, bt[i], wt[i], tat[i]);
+    }
+
+    printf("Average WT = %.2f\n", avgwt / n);
+    printf("Average TAT = %.2f\n", avgtat / n);
+
+    return 0;
+}
