@@ -1,0 +1,68 @@
+
+#include <stdio.h>
+#include <string.h>
+
+int main()
+{
+    char users[10][20], files[10][10][20];
+    int nu = 0, nf[10] = {0};
+    int choice, u, i;
+    char uname[20], fname[20];
+
+    while(1)
+    {
+        printf("\n1.Create User");
+        printf("\n2.Create File");
+        printf("\n3.Display Directory");
+        printf("\n4.Exit");
+        printf("\nEnter choice: ");
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+            case 1:
+                printf("Enter username: ");
+                scanf("%s", uname);
+                strcpy(users[nu], uname);
+                nu++;
+                printf("User created");
+                break;
+
+            case 2:
+                printf("Enter username: ");
+                scanf("%s", uname);
+                u = -1;
+
+                for(i = 0; i < nu; i++)
+                    if(strcmp(users[i], uname) == 0)
+                        u = i;
+
+                if(u == -1)
+                {
+                    printf("User not found");
+                    break;
+                }
+
+                printf("Enter file name: ");
+                scanf("%s", fname);
+                strcpy(files[u][nf[u]++], fname);
+                printf("File created");
+                break;
+
+            case 3:
+                for(i = 0; i < nu; i++)
+                {
+                    printf("\nUser: %s\n", users[i]);
+                    for(int j = 0; j < nf[i]; j++)
+                        printf("  %s\n", files[i][j]);
+                }
+                break;
+
+            case 4:
+                return 0;
+
+            default:
+                printf("Invalid choice");
+        }
+    }
+}
